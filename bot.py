@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 """
-    PhBox_Bot - This bot will send a porn pic when asked.
+    NotSafeForWork - This bot will send a porn pic when asked.
     Copyright (C) 2023  NinjaLeft
 
     This program is free software: you can redistribute it and/or modify
@@ -29,8 +29,12 @@ from os import listdir, path, rename
 import sys
 
 debug = False
-args = [arg for arg in sys.argv if arg not in ["bot.py", "./bot.py", "python"]]
-API_TOKEN = "TokenYouGotFromBotFather"
+args = [
+    arg
+    for arg in sys.argv
+    if arg not in ["main.py", "bot.py", "./main.py", "./bot.py", "python"]
+]
+API_TOKEN = "TokenFromBotFather"
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
     "Artistic",
@@ -45,7 +49,7 @@ cats = [
     "Traps",
     "Traps Hentai",
     "Upskirt",
-]  # These categories have image files inside them
+]
 bannedCats = [
     "Clothing",
     "Company",
@@ -68,14 +72,13 @@ def start(message: telebot.types.Message):
     bot.send_message(
         message.chat.id,
         f"""Hello, User.
-    All commands:
+  You can start using the bot with these commands:
     /pic - Random Photo
-    /cat [Category Name] - Get a pic from [Category Name]
+    /cat [Category] - Get a pic from [Category]
 
-    Categories Names:
+  All Categories:
 {printList(cats)}
 
-Have a nice day!
 """,
     )
 
@@ -157,12 +160,13 @@ if __name__ == "__main__":
     This program comes with ABSOLUTELY NO WARRANTY.
     This is free software, and you are welcome to
     redistribute it under certain conditions.
-{Fore.GREEN}\t______ _    ______
-\t| ___ \ |   | ___ \ 
-\t| |_/ / |__ | |_/ / _____  __
-\t|  __/| '_ \| ___ \/ _ \ \/ /
-\t| |   | | | | |_/ / (_) >  <
-\t\_|   |_| |_\____/ \___/_/\_\ 
+{Fore.GREEN}
+\t _______    ______________________      __
+\t \      \  /   _____/\_   _____/  \    /  \\
+\t /   |   \ \_____  \  |    __) \   \/\/   /
+\t/    |    \/        \ |     \   \        /
+\t\____|__  /_______  / \___  /    \__/\  /
+\t        \/        \/      \/          \/
 {Fore.RESET}
 """
         )
