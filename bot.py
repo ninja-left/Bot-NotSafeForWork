@@ -30,7 +30,7 @@ import sys
 
 debug = False
 args = [arg for arg in sys.argv if arg not in ["bot.py", "./bot.py", "python"]]
-API_TOKEN = "6136389534:AAH-HdT_L2Z82SeWjXqym3VHkoxWNKmVXsw"
+API_TOKEN = "TokenYouGotFromBotFather"
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
     "Artistic",
@@ -45,7 +45,7 @@ cats = [
     "Traps",
     "Traps Hentai",
     "Upskirt",
-]
+]  # These categories have image files inside them
 bannedCats = [
     "Clothing",
     "Company",
