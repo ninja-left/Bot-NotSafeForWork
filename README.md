@@ -9,10 +9,10 @@
 
 # PhBox
 Telegram bot that sends NSFW images when asked.
-<div align=center>
-    <br>
+<div>
     <a href="https://t.me/L1brty">
     <img src="https://img.shields.io/badge/Telegram-blue?logo=Telegram&logoColor=black&style=for-the-badge"></a>
+    <br>
 </div>
 
 Created using pyTelegramBotAPI library.
