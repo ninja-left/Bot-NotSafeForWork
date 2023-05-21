@@ -58,6 +58,7 @@ bannedCats = [
     "Position",
 ]  # These categories have subdirs instead of files.
 MessageCaption = ""
+ProtectImage = False  # If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
 
 
 def printList(iterable: list | tuple):
@@ -101,7 +102,7 @@ def randomPic(message: telebot.types.Message):
     bot.send_photo(
         chatID,
         BytesIO(ImageFile),
-        protect_content=True,
+        protect_content=ProtectImage,
         reply_to_message_id=message.id,
         caption="Enjoy!",
     )
@@ -131,7 +132,7 @@ def picFromCat(message: telebot.types.Message):
             bot.send_photo(
                 chatID,
                 BytesIO(ImageFile),
-                protect_content=True,
+                protect_content=ProtectImage,
                 reply_to_message_id=message.id,
                 caption="Enjoy!",
             )
