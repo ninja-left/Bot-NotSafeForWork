@@ -14,5 +14,7 @@ Telegram bot that sends NSFW images when asked.
     <img src="https://img.shields.io/badge/Telegram-blue?logo=Telegram&logoColor=black&style=for-the-badge"></a>
     <br>
 </div>
+<br>
 
-Created using pyTelegramBotAPI library.
+I wrote this bot to test my skills and also experience writing telegram bots.
+This bot is written using pyTelegramBotAPI library.
