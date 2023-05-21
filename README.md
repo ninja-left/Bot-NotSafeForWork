@@ -10,7 +10,7 @@
 # PhBox
 Telegram bot that sends NSFW images when asked.
 <div>
-    <a href="https://t.me/L1brty">
+    <a href="https://t.me/PhBox_Bot">
     <img src="https://img.shields.io/badge/Telegram-blue?logo=Telegram&logoColor=black&style=for-the-badge"></a>
     <br>
 </div>
