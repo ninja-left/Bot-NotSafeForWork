@@ -29,11 +29,7 @@ from os import listdir, path, rename
 import sys
 
 debug = False
-args = [
-    arg
-    for arg in sys.argv
-    if arg not in ["main.py", "bot.py", "./main.py", "./bot.py", "python"]
-]
+args = [arg for arg in sys.argv if arg not in ["bot.py", "./bot.py", "python"]]
 API_TOKEN = "TokenFromBotFather"
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
@@ -58,7 +54,7 @@ bannedCats = [
     "Position",
 ]  # These categories have subdirs instead of files.
 MessageCaption = ""
-ProtectImage = False  # If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
+ProtectImage = False
 
 
 def printList(iterable: list | tuple):
@@ -76,6 +72,9 @@ def start(message: telebot.types.Message):
   You can start using the bot with these commands:
     /pic - Random Photo
     /cat [Category] - Get a pic from [Category]
+    Example:
+        /cat Lesbian
+        /cat Tattoo
 
   All Categories:
 {printList(cats)}
@@ -153,11 +152,10 @@ def errorCat(message: telebot.types.Message):
 
 
 if __name__ == "__main__":
-    # Running the script with --debug will add the Category/FileName to the photo caption.
     try:
         print(
             f"""
-    PhBox  Copyright (C) 2023  NinjaLeft
+    NotSafeForWork  Copyright (C) 2023  NinjaLeft
     This program comes with ABSOLUTELY NO WARRANTY.
     This is free software, and you are welcome to
     redistribute it under certain conditions.
@@ -171,10 +169,28 @@ if __name__ == "__main__":
 {Fore.RESET}
 """
         )
+        if "--help" in args:
+            print(
+                """
+    --help\t\t - Show this message and exit.
+    --debug\t\t - Script and bot show additional information.
+    --protect=true/false\t\t - If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
+            """
+            )
+            sys.exit(0)
+
+        for a in args:
+            if a.startswith("--protect"):
+                a = a.split("=")[-1].lower()
+                if "true" in a:
+                    ProtectImage = True
+
         if "--debug" in args:
             debug = True
             print(f"sys.argv: {sys.argv}")
             print(f"Clean: {args}")
+            print(f"Protect Content: {ProtectImage}")
+
         bot.polling()
     except KeyboardInterrupt:
         print(
@@ -189,6 +205,7 @@ if __name__ == "__main__":
         )
         bot.stop_polling()
         sys.exit(0)
+
     except:
         print(Fore.RED, "*" * 10)
         print(f"Something bad happened:{Fore.RESET}")
