@@ -92,7 +92,8 @@ def randomPic(message: telebot.types.Message):
     contents.sort()
     ImageFileName = choice(contents)
     ImagePath = path.join(cPath, ImageFileName)
-    ImageFile = open(ImagePath, "rb").read()
+    with open(ImagePath, "rb") as file:
+        ImageFile = file.read()
     if debug:
         MessageCaption = f"{cat}/{ImageFileName}"
     else:
@@ -122,7 +123,8 @@ def picFromCat(message: telebot.types.Message):
             contents.sort()
             ImageFileName = choice(contents)
             ImagePath = path.join(iPath, ImageFileName)
-            ImageFile = open(ImagePath, "rb").read()
+            with open(ImagePath, "rb") as file:
+                ImageFile = file.read()
             if debug:
                 MessageCaption = f"{results}/{ImageFileName}"
             else:
