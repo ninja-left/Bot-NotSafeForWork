@@ -25,21 +25,24 @@ from colorama import Fore
 from io import BytesIO
 import re
 from random import choice
-from os import listdir, path, rename
+from os import listdir, path, rename, system, stat
 import sys
 
 debug = False
 badArgs = ["bot.py", "./bot.py", "python"]
 args = [arg for arg in sys.argv if arg not in badArgs]
 API_TOKEN = "TokenFromBotFather"
-if API_TOKEN == "TokenFromBotFather":
-    API_TOKEN = input(" Bot Token: ")
-results = re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN)
-if not results:
-    print(f"{Fore.RED} [×] Bad Token:{Fore.RESET} {API_TOKEN}")
-    sys.exit(1)
-else:
-    print(f"{Fore.GREEN} [!] Token is OK.{Fore.RESET}")
+try:
+    if not re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN):
+        API_TOKEN = input(" Bot Token: ")
+    if not re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN):
+        print(f"{Fore.RED} [×] Bad Token:{Fore.RESET} {API_TOKEN}")
+        sys.exit(1)
+except KeyboardInterrupt:
+    sys.exit(0)
+except:
+    raise
+
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
     "Artistic",
@@ -80,9 +83,7 @@ def start(message: telebot.types.Message):
         /cat Tattoo
 
   All Categories:
-{printList(cats)}
-
-""",
+{printList(cats)}""",
     )
 
 
@@ -174,8 +175,7 @@ if __name__ == "__main__":
     --help\t\t - Show this message and exit.
     --debug\t\t - Script and bot show additional information.
     --protect=true/false\t\t - If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
-    --getCats\t\t - Downloads the Cats folder from IPFS.
-            """
+        """
             )
             sys.exit(0)
 
@@ -190,21 +190,6 @@ if __name__ == "__main__":
             print(f"sys.argv: {sys.argv}")
             print(f"Clean: {args}")
             print(f"Protect Content: {ProtectImage}")
-
-        if "--getCats" in args:
-            try:
-                import ipfsapi
-
-                api = ipfsapi.Client(host="https://ipfs.io", port=5001)
-                api.get("QmeQa1a8sEAaXUtnrrypYD3Giy77L7MjY822ZVR6BRT3ZK")
-            except ModuleNotFoundError:
-                print(f"{Fore.RED} Install ipfsapi. {Fore.RESET}")
-                sys.exit(1)
-
-            except:
-                print(Fore.RED, "*" * 10)
-                print(f"Something bad happened:{Fore.RESET}")
-                raise
 
         bot.polling(skip_pending=True, restart_on_change=True, path_to_watch=".")
     except KeyboardInterrupt:
