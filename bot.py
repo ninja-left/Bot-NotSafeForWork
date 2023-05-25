@@ -191,7 +191,7 @@ if __name__ == "__main__":
             print(f"Clean: {args}")
             print(f"Protect Content: {ProtectImage}")
 
-        bot.polling(skip_pending=True, restart_on_change=True, path_to_watch=".")
+        bot.polling(skip_pending=True)
 
     except KeyboardInterrupt:
         print(
