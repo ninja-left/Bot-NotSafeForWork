@@ -1,3 +1,4 @@
+ipfsapi
 requests
 pyTelegramBotAPI
 colorama
