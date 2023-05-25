@@ -32,6 +32,14 @@ debug = False
 badArgs = ["bot.py", "./bot.py", "python"]
 args = [arg for arg in sys.argv if arg not in badArgs]
 API_TOKEN = "TokenFromBotFather"
+if API_TOKEN == "TokenFromBotFather":
+    API_TOKEN = input(" Bot Token: ")
+results = re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN)
+if not results:
+    print(f"{Fore.RED} [×] Bad Token:{Fore.RESET} {API_TOKEN}")
+    sys.exit(1)
+else:
+    print(f"{Fore.GREEN} [!] Token is OK.{Fore.RESET}")
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
     "Artistic",
