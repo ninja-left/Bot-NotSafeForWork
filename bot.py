@@ -192,6 +192,7 @@ if __name__ == "__main__":
             print(f"Protect Content: {ProtectImage}")
 
         bot.polling(skip_pending=True, restart_on_change=True, path_to_watch=".")
+
     except KeyboardInterrupt:
         print(
             """
@@ -205,6 +206,9 @@ if __name__ == "__main__":
         )
         bot.stop_polling()
         sys.exit(0)
+
+    except SystemExit:
+        raise
 
     except:
         print(Fore.RED, "*" * 10)
