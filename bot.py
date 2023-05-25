@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
     NotSafeForWork - This bot will send a porn pic when asked.
@@ -29,7 +29,8 @@ from os import listdir, path, rename
 import sys
 
 debug = False
-args = [arg for arg in sys.argv if arg not in ["bot.py", "./bot.py", "python"]]
+badArgs = ["bot.py", "./bot.py", "python"]
+args = [arg for arg in sys.argv if arg not in badArgs]
 API_TOKEN = "TokenFromBotFather"
 bot = telebot.TeleBot(API_TOKEN)
 cats = [
@@ -46,13 +47,7 @@ cats = [
     "Traps Hentai",
     "Upskirt",
 ]
-bannedCats = [
-    "Clothing",
-    "Company",
-    "Cum",
-    "Pornstar",
-    "Position",
-]  # These categories have subdirs instead of files.
+
 MessageCaption = ""
 ProtectImage = False
 
@@ -114,34 +109,28 @@ def picFromCat(message: telebot.types.Message):
     messageText = message.text
     results = re.match(r"(/cat [a-zA-Z]{2,9}( Hentai)?)", messageText).group()
     results = results.replace("/cat ", "")
-    if results in cats or results in bannedCats:
-        if results not in bannedCats:
-            iPath = f"./Cats/{results}"
-            contents = [
-                file for file in listdir(iPath) if path.isfile(path.join(iPath, file))
-            ]
-            contents.sort()
-            ImageFileName = choice(contents)
-            ImagePath = path.join(iPath, ImageFileName)
-            with open(ImagePath, "rb") as file:
-                ImageFile = file.read()
-            if debug:
-                MessageCaption = f"{results}/{ImageFileName}"
-            else:
-                MessageCaption = f"Choosing image from {results} ..."
-            bot.reply_to(message, MessageCaption)
-            bot.send_photo(
-                chatID,
-                BytesIO(ImageFile),
-                protect_content=ProtectImage,
-                reply_to_message_id=message.id,
-                caption="Enjoy!",
-            )
+    if results in cats:
+        iPath = f"./Cats/{results}"
+        contents = [
+            file for file in listdir(iPath) if path.isfile(path.join(iPath, file))
+        ]
+        contents.sort()
+        ImageFileName = choice(contents)
+        ImagePath = path.join(iPath, ImageFileName)
+        with open(ImagePath, "rb") as file:
+            ImageFile = file.read()
+        if debug:
+            MessageCaption = f"{results}/{ImageFileName}"
         else:
-            bot.reply_to(
-                message,
-                "This category is not implemented yet; End-User (You) cannot access it.",
-            )
+            MessageCaption = f"Choosing image from {results} ..."
+        bot.reply_to(message, MessageCaption)
+        bot.send_photo(
+            chatID,
+            BytesIO(ImageFile),
+            protect_content=ProtectImage,
+            reply_to_message_id=message.id,
+            caption="Enjoy!",
+        )
     else:
         bot.reply_to(
             message, "Category not found. You can get the list of them using /help ."
@@ -177,6 +166,7 @@ if __name__ == "__main__":
     --help\t\t - Show this message and exit.
     --debug\t\t - Script and bot show additional information.
     --protect=true/false\t\t - If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
+    --getCats\t\t - Downloads the Cats folder from IPFS.
             """
             )
             sys.exit(0)
@@ -193,7 +183,22 @@ if __name__ == "__main__":
             print(f"Clean: {args}")
             print(f"Protect Content: {ProtectImage}")
 
-        bot.polling()
+        if "--getCats" in args:
+            try:
+                import ipfsapi
+
+                api = ipfsapi.Client(host="https://ipfs.io", port=5001)
+                api.get("QmeQa1a8sEAaXUtnrrypYD3Giy77L7MjY822ZVR6BRT3ZK")
+            except ModuleNotFoundError:
+                print(f"{Fore.RED} Install ipfsapi. {Fore.RESET}")
+                sys.exit(1)
+
+            except:
+                print(Fore.RED, "*" * 10)
+                print(f"Something bad happened:{Fore.RESET}")
+                raise
+
+        bot.polling(skip_pending=True, restart_on_change=True, path_to_watch=".")
     except KeyboardInterrupt:
         print(
             """
