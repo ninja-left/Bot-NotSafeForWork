@@ -18,3 +18,5 @@ Telegram bot that sends NSFW images when asked.
 
 I wrote this bot to test my skills and also experience writing telegram bots.
 This bot is written using pyTelegramBotAPI library.
+
+It is worth mentioning that the source of the images I used for the bot is [this](https://github.com/d00ML0rDz/nsfw-image-urls) repository.
