@@ -15,12 +15,11 @@ Telegram bot that sends NSFW images when asked.
 ## Why?
 I made this project just for fun and I wanted to experience writing telegram bots.
 This bot is written using pyTelegramBotAPI library.
+This bot can send images and accepts commands from menu.
 
 ## Usage
-You can test the bot using:
+You can see the bot using:
 
 [![t.me/NotSafeForWorkBot](https://img.shields.io/badge/NotSafeForWorkBot-blue?style=flat-square&logo=Telegram)](https://t.me/NotSafeForWorkBot)
 
-#### Note:
-Since I'm using a [free host](https://www.pythonanywhere.com) for the bot, you may find the bot to be down occasionally.
-It is worth mentioning that the source of the images I used for the bot is [this](https://github.com/d00ML0rDz/nsfw-image-urls) repository.
+It deesn't answer any requests.
