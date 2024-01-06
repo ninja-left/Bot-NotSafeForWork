@@ -4,7 +4,7 @@
   <a href="./LICENSE">
     <img src="https://img.shields.io/github/license/ninja-left/Bot-NotSafeForWork">
   </a>
-  <a href="https://github.com/ninja-left/Bot-NotSafeForWor">
+  <a href="https://github.com/ninja-left/Bot-NotSafeForWork">
     <img src="https://img.shields.io/github/commit-activity/m/ninja-left/Bot-NotSafeForWork">
   </a>
 </div>
