@@ -66,7 +66,7 @@ def printList(iterable: list | tuple):
 def start(message: telebot.types.Message):
     bot.send_message(
         message.chat.id,
-        f"""Hello, User.
+        f"""Hello, {message.chat.first_name}.
   You can start using the bot with these commands:
     /pic - Random Photo
     /cat [Category] - Get a pic from [Category]
