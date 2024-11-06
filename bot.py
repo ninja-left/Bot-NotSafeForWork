@@ -21,14 +21,12 @@
 import telebot
 from colorama import Fore
 from io import BytesIO
-from re import match
 from random import choice
 from os import listdir, path, environ
 import sys
 
 debug = False
-badArgs = ["bot.py", "./bot.py", "python"]
-args = [arg for arg in sys.argv if arg not in badArgs]
+args = sys.argv
 try:
     API_TOKEN = environ["TELEGRAM_BOT_API_TOKEN"]
     if not API_TOKEN:
@@ -50,7 +48,11 @@ except:
 cats = listdir("./Cats")
 
 MessageCaption = ""
+# ^^^^^^^^^^ This message will be sent as a reply to user's command
 ProtectImage = False
+# ^^^^^^^^^^ If true, will restrict the user from forwarding or saving the photo
+PhotoCaption = "Enjoy!"
+# ^^^^^^^^^^ This message will be sent as a caption in chosen image
 
 
 def printList(iterable: list | tuple):
@@ -76,13 +78,16 @@ def start(message: telebot.types.Message):
 
 @bot.message_handler(commands=["pic"])
 def randomPic(message: telebot.types.Message):
-    chatID = message.chat.id
+    chatID = message.chat.id  # Will be used for sending the image
     cat = choice(cats)
-    cPath = f"./Cats/{cat}"
-    contents = [file for file in listdir(cPath) if path.isfile(path.join(cPath, file))]
+    catPath = f"./Cats/{cat}"
+    contents = [
+        file for file in listdir(catPath) if path.isfile(path.join(catPath, file))
+    ]
+    #  ^^^^^ The list of all files in chosen category
     contents.sort()
     ImageFileName = choice(contents)
-    ImagePath = path.join(cPath, ImageFileName)
+    ImagePath = path.join(catPath, ImageFileName)
     with open(ImagePath, "rb") as file:
         ImageFile = file.read()
     if debug:
@@ -95,37 +100,38 @@ def randomPic(message: telebot.types.Message):
         BytesIO(ImageFile),
         protect_content=ProtectImage,
         reply_to_message_id=message.id,
-        caption="Enjoy!",
+        caption=PhotoCaption,
     )
 
 
-@bot.message_handler(regexp="/cat [a-zA-Z]{2,9}( Hentai)?")
+@bot.message_handler(regexp="/cat [a-zA-Z0-9 ]+")
 def picFromCat(message: telebot.types.Message):
     chatID = message.chat.id
-    messageText = message.text
-    results = match(r"(/cat [a-zA-Z]{2,9}( Hentai)?)", messageText).group()
-    results = results.replace("/cat ", "")
+    results = message.text.replace("/cat ", "")
     if results in cats:
-        iPath = f"./Cats/{results}"
+        catPath = f"./Cats/{results}"
         contents = [
-            file for file in listdir(iPath) if path.isfile(path.join(iPath, file))
+            file for file in listdir(catPath) if path.isfile(path.join(catPath, file))
         ]
         contents.sort()
+
         ImageFileName = choice(contents)
-        ImagePath = path.join(iPath, ImageFileName)
+        ImagePath = path.join(catPath, ImageFileName)
         with open(ImagePath, "rb") as file:
             ImageFile = file.read()
+
         if debug:
             MessageCaption = f"{results}/{ImageFileName}"
         else:
             MessageCaption = f"Choosing image from {results} ..."
         bot.reply_to(message, MessageCaption)
+
         bot.send_photo(
             chatID,
             BytesIO(ImageFile),
             protect_content=ProtectImage,
             reply_to_message_id=message.id,
-            caption="Enjoy!",
+            caption=PhotoCaption,
         )
     else:
         bot.reply_to(
@@ -162,6 +168,7 @@ if __name__ == "__main__":
     --help\t\t - Show this message and exit.
     --debug\t\t - Script and bot show additional information.
     --protect=true/false\t\t - If True, removes the ability of saving/forwarding images; Taking screenshots works on pc.
+    --caption=text...\t\t - If specified, will be sent to users instead of default 'Enjoy!' caption
         """
             )
             sys.exit(0)
@@ -175,8 +182,9 @@ if __name__ == "__main__":
         if "--debug" in args:
             debug = True
             print(f"sys.argv: {sys.argv}")
-            print(f"Clean: {args}")
             print(f"Protect Content: {ProtectImage}")
+            print(f"Photo caption: {PhotoCaption}")
+            print(f"Cats: {cats}")
 
         bot.polling(skip_pending=True)
 
