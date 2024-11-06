@@ -16,48 +16,38 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 """
-
 
 import telebot
 from colorama import Fore
 from io import BytesIO
-import re
+from re import match
 from random import choice
-from os import listdir, path, rename, system, stat
+from os import listdir, path, environ
 import sys
 
 debug = False
 badArgs = ["bot.py", "./bot.py", "python"]
 args = [arg for arg in sys.argv if arg not in badArgs]
-API_TOKEN = "TokenFromBotFather"
 try:
-    if not re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN):
-        API_TOKEN = input(" Bot Token: ")
-    if not re.fullmatch(r"^[0-9]{10}:[a-zA-Z0-9]{35}", API_TOKEN):
-        print(f"{Fore.RED} [×] Bad Token:{Fore.RESET} {API_TOKEN}")
-        sys.exit(1)
-except KeyboardInterrupt:
-    sys.exit(0)
-except:
-    raise
+    API_TOKEN = environ["TELEGRAM_BOT_API_TOKEN"]
+    if not API_TOKEN:
+        raise ValueError("TELEGRAM_BOT_API_TOKEN has no value")
+except KeyError:
+    print(
+        f"{Fore.RED}Error trying to read TELEGRAM_BOT_API_TOKEN:{Fore.RESET} Not defined in environment"
+    )
+    sys.exit(1)
+except Exception as e:
+    print(f"{Fore.RED}Error trying to read TELEGRAM_BOT_API_TOKEN:{Fore.RESET} {e}")
+    sys.exit(1)
 
 bot = telebot.TeleBot(API_TOKEN)
-cats = [
-    "Artistic",
-    "Athletic",
-    "BDSM",
-    "Cameltoe",
-    "HQ",
-    "Lesbian",
-    "Small-Ass",
-    "Small-Tits",
-    "Tattoo",
-    "Traps",
-    "Traps Hentai",
-    "Upskirt",
-]
+try:
+    assert path.exists("./Cats")
+except:
+    raise Exception("No categories folder ('Cats') exist")
+cats = listdir("./Cats")
 
 MessageCaption = ""
 ProtectImage = False
@@ -78,9 +68,6 @@ def start(message: telebot.types.Message):
   You can start using the bot with these commands:
     /pic - Random Photo
     /cat [Category] - Get a pic from [Category]
-    Example:
-        /cat Lesbian
-        /cat Tattoo
 
   All Categories:
 {printList(cats)}""",
@@ -116,7 +103,7 @@ def randomPic(message: telebot.types.Message):
 def picFromCat(message: telebot.types.Message):
     chatID = message.chat.id
     messageText = message.text
-    results = re.match(r"(/cat [a-zA-Z]{2,9}( Hentai)?)", messageText).group()
+    results = match(r"(/cat [a-zA-Z]{2,9}( Hentai)?)", messageText).group()
     results = results.replace("/cat ", "")
     if results in cats:
         iPath = f"./Cats/{results}"
